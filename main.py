@@ -1,9 +1,6 @@
 import cv2
 import sys
 
-# allows you to enlargen the frames
-scale = 6
-
 # Function to resize a frame to fit within a 20x20 display and return render size
 def resize_frame(frame):
     # Set the maximum width or height for resizing
@@ -13,7 +10,7 @@ def resize_frame(frame):
     height, width = frame.shape[:2]
 
     # Calculate the scaling factor based on the maximum dimension
-    scale_factor = min(max_dimension / width, max_dimension / height) * scale
+    scale_factor = min(max_dimension / width, max_dimension / height)
 
     # Resize the frame with the calculated scale factor
     resized_frame = cv2.resize(frame, (int(width * scale_factor), int(height * scale_factor)))
@@ -25,11 +22,39 @@ def convert_frame_to_monochrome(frame):
     # Convert the frame to monochrome by extracting the red channel
     red_channel = frame[:, :, 2]
     
-    # Convert each pixel to a two-digit value indicating the intensity of red
+    # Convert each pixel to a three-digit value indicating the intensity of red
     monochrome_pixels = [f"{red_val:03d}" for red_val in red_channel.flatten()]
     
     # Concatenate the pixels into a single string
     frame_string = ''.join(monochrome_pixels)
+    
+    return frame_string
+
+# Function to convert a frame to hexadecimal format
+def convert_frame_to_hex(frame):
+    hex_colors = []
+    height, width, _ = frame.shape
+    for y in range(height):
+        for x in range(width):
+            b, g, r = frame[y, x]
+            hex_color = f"{r:02X}{g:02X}{b:02X}"
+            hex_colors.append(hex_color)
+    
+    # Concatenate the hexadecimal color codes into a single string
+    frame_hex_string = ''.join(hex_colors)
+    
+    return frame_hex_string
+
+# Function to convert a frame to RGB format
+def convert_frame_to_rgb(frame):
+    # Split the frame into RGB components
+    b, g, r = cv2.split(frame)
+    
+    # Flatten the RGB components and format them with leading zeros
+    pixels = [f"{r_val:03d}{g_val:03d}{b_val:03d}" for b_val, g_val, r_val in zip(b.flatten(), g.flatten(), r.flatten())]
+    
+    # Concatenate the pixels into a single string
+    frame_string = ''.join(pixels)
     
     return frame_string
 
