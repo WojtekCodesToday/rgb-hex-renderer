@@ -4,7 +4,7 @@ import sys
 # Function to resize a frame to fit within a 20x20 display and return render size
 def resize_frame(frame):
     # Set the maximum width or height for resizing
-    max_dimension = 20
+    max_dimension = 120
     
     # Find the width and height of the frame
     height, width = frame.shape[:2]
